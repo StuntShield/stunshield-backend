@@ -98,4 +98,6 @@ def predict_stunting():
         
 
 if __name__ == "__main__":
-    app.run()
+     # Gunakan PORT dari variabel lingkungan
+    port = int(os.environ.get('PORT', 8080))
+    app.run(host='0.0.0.0', port=port)
