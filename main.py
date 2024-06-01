@@ -68,7 +68,7 @@ def predict_stunting():
                 writer = csv.DictWriter(file, fieldnames=fieldnames)
                 writer.writeheader()
                 for row in data:
-                    writer.writerow(row)
+                    writer.writerow(data)
             blob = bucket.blob('Users_input/'+file_csv+str(random.randint(10000,99999)) )
             blob.upload_from_filename(file_path)
             os.remove(file_path)
