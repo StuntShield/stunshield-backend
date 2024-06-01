@@ -23,4 +23,4 @@ steps:
       - "--set-secret=BUCKET_NAME=bucket_name:latest"
 images:
   - "us-central1-docker-pkg.dev/$PROJECT_ID/capstonecicd-artifact/model-image:$COMMIT_SHA"
-logsbucket: "gs://capstonecicd-bucket/logs"
+logsBucket: "gs://capstonecicd-bucket/logs"
