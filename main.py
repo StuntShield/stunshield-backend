@@ -30,7 +30,7 @@ def index():
     return jsonify({
         "status" : {
             "code" : HTTPStatus.OK,
-            "message" : "nyambung cuy santui",
+            "message" : "nyambung cuy santui...",
         },
         "data" : None
     }),HTTPStatus.OK
