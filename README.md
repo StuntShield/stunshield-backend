@@ -1,2 +1,2 @@
-# stunshield-backend
-StuntShield - Back End Stunting Application
+# stunshield-cicd
+StuntShield - CICD Stunting Application
