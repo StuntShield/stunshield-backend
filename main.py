@@ -19,7 +19,7 @@ app.config['GCS_CREDENTIALS'] = './credentials/gcs.json'
 
 model = tf.keras.models.load_model(app.config['MODEL_CLASSIFICATION'],compile=False)
 
-bucket_name = os.environ.get('BUCKET_NAME','data-balita')
+bucket_name = os.environ.get('BUCKET_NAME','capstonecicd-bucket')
 client = storage.Client.from_service_account_json(json_credentials_path=app.config['GCS_CREDENTIALS'])
 bucket = storage.Bucket(client,bucket_name)
 
