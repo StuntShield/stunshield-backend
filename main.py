@@ -3,10 +3,11 @@ import pandas as pd
 import numpy as np
 import csv
 import random
+import json
 from http import HTTPStatus
 import tensorflow as tf
 from flask import Flask, jsonify, request
-from google.cloud import storage
+from google.cloud import storage, secretmanager_v1 as secretmanager
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -15,12 +16,25 @@ app = Flask(__name__)
 # Hint for anak CC: mungkin bsa di tambahin codingan buat masukin inputan user sama outputnya ke bucket buat data tambahan training model
 app.config['UPLOAD_FOLDER'] = 'Users/uploads/'
 app.config['MODEL_CLASSIFICATION'] = './model/stunting_prediction.h5'
-app.config['GCS_CREDENTIALS'] = './credentials/gcs.json'
+
+# Set variabel lingkungan untuk Google Application Credentials
+# os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.path.abspath("./credentials/gcs.json")
+
+# Fungsi untuk mengambil key dari Secret Manager
+def get_secret(secret_name):
+    project_id = "capstone-test-424803"  # ID proyek kamu
+    secret_name = f"projects/{project_id}/secrets/{secret_name}/versions/latest"
+    secret_client = secretmanager.SecretManagerServiceClient()
+    response = secret_client.access_secret_version(request={"name": secret_name})
+    return json.loads(response.payload.data.decode("UTF-8"))
+
+# Mengambil key dari Secret Manager
+gcs_credentials = get_secret('gcs-key')
 
 model = tf.keras.models.load_model(app.config['MODEL_CLASSIFICATION'],compile=False)
 
+client = storage.Client.from_service_account_info(gcs_credentials)
 bucket_name = os.environ.get('BUCKET_NAME','capstonecicd-bucket')
-client = storage.Client.from_service_account_json(json_credentials_path=app.config['GCS_CREDENTIALS'])
 bucket = storage.Bucket(client,bucket_name)
 
 classes = ["Stunting Berat","Stunting","Normal","Tinggi"] 
@@ -98,6 +112,7 @@ def predict_stunting():
         
 
 if __name__ == "__main__":
-     # Gunakan PORT dari variabel lingkungan
-    port = int(os.environ.get('PORT', 8080))
-    app.run(host='0.0.0.0', port=port)
+    app.run()
+    # Gunakan PORT dari variabel lingkungan
+    # port = int(os.environ.get('PORT', 8080))
+    # app.run(host='0.0.0.0', port=port)
