@@ -15,12 +15,13 @@ app = Flask(__name__)
 # Hint for anak CC: mungkin bsa di tambahin codingan buat masukin inputan user sama outputnya ke bucket buat data tambahan training model
 app.config['UPLOAD_FOLDER'] = 'Users/uploads/'
 app.config['MODEL_CLASSIFICATION'] = './model/stunting_prediction.h5'
-app.config['GCS_CREDENTIALS'] = './credentials/gcs.json'
+# app.config['GCS_CREDENTIALS'] = '../credentials/gcs.json'
 
 model = tf.keras.models.load_model(app.config['MODEL_CLASSIFICATION'],compile=False)
 
 bucket_name = os.environ.get('BUCKET_NAME','capstonecicd-bucket')
-client = storage.Client.from_service_account_json(json_credentials_path=app.config['GCS_CREDENTIALS'])
+credentials_path = os.environ.get('CREDENTIALS')
+client = storage.Client.from_service_account_json(credentials_path)
 bucket = storage.Bucket(client,bucket_name)
 
 classes = ["Stunting Berat","Stunting","Normal","Tinggi"] 
@@ -97,6 +98,7 @@ def predict_stunting():
         
 
 if __name__ == "__main__":
+    app.run()
      # Gunakan PORT dari variabel lingkungan
-    port = int(os.environ.get('PORT', 8080))
-    app.run(host='0.0.0.0', port=port)
+    # port = int(os.environ.get('PORT', 8080))
+    # app.run(host='0.0.0.0', port=port)
