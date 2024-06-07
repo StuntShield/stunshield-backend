@@ -3,11 +3,13 @@ import pandas as pd
 import numpy as np
 import csv
 import random
+import json
 from http import HTTPStatus
 import tensorflow as tf
 from flask import Flask, jsonify, request
 from google.cloud import storage
 from dotenv import load_dotenv
+from google.oauth2 import service_account
 
 load_dotenv()
 
@@ -20,8 +22,13 @@ app.config['MODEL_CLASSIFICATION'] = './model/stunting_prediction.h5'
 model = tf.keras.models.load_model(app.config['MODEL_CLASSIFICATION'],compile=False)
 
 bucket_name = os.environ.get('BUCKET_NAME','capstonecicd-bucket')
-credentials_path = os.environ.get('CREDENTIALS')
-client = storage.Client.from_service_account_json(credentials_path)
+credentials_json = os.environ.get('CREDENTIALS')
+
+# Load credentials from the environment variable
+credentials_dict = json.loads(credentials_json)
+credentials = service_account.Credentials.from_service_account_info(credentials_dict)
+client = storage.Client(credentials=credentials)
+
 bucket = storage.Bucket(client,bucket_name)
 
 classes = ["Stunting Berat","Stunting","Normal","Tinggi"] 
