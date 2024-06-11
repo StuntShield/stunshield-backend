@@ -20,6 +20,5 @@ app.register_error_handler(404, ErrorHandlers.page_not_found)
 app.register_error_handler(500, ErrorHandlers.internal_server_error)
 
 if __name__ == '__main__':  # Running the app
-    app.run(
-        host=config['BASE_URL'], port=config['PORT'], debug=config['DEBUG']
-    )
+    port = int(os.environ.get('PORT', 8080))
+    app.run(host='0.0.0.0', port=port)
