@@ -1,7 +1,7 @@
 main_config = {
-    'DEBUG': True,
-    'BASE_URL': 'http://localhost',
-    'PORT': '5000',
+    'DEBUG': False,
+    'BASE_URL': '0.0.0.0',
+    'PORT': '8080',
     'UPLOAD_FOLDER_STUNTING': 'app/assets/users_uploads/data_stunting',
     'UPLOAD_FOLDER_WEIGHT': 'app/assets/users_uploads/data_weight',
     'UPLOAD_FOLDER_IDEAL_024': 'app/assets/users_uploads/data_ideal/umur_0_24_bulan',

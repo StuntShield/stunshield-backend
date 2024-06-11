@@ -14,7 +14,7 @@ steps:
     args:
       - "run"
       - "deploy"
-      - "api-model"
+      - "stuntshield"
       - "--image=us-central1-docker.pkg.dev/$PROJECT_ID/capstonecicd-artifact/model-image:$COMMIT_SHA"
       - "--region=us-central1"
       - "--cpu=1"
@@ -22,6 +22,7 @@ steps:
       - "--allow-unauthenticated"
       - "--set-secrets=BUCKET_NAME=bucket-name:latest"
       - "--set-secrets=CREDENTIALS=gcs-key:latest"
+      - "--set-secrets=OPENAI_KEY=openai-key:latest"
 images:
   - "us-central1-docker.pkg.dev/$PROJECT_ID/capstonecicd-artifact/model-image:$COMMIT_SHA"
 logsBucket: "gs://capstonecicd-bucket/logs"

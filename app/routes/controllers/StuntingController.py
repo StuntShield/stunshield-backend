@@ -5,6 +5,7 @@ import pandas as pd
 import numpy as np
 import csv
 import random
+import json
 from http import HTTPStatus
 import tensorflow as tf
 from flask import Flask, jsonify, request
@@ -13,14 +14,19 @@ from dotenv import load_dotenv
 from ...config import model_config as mconfig
 from ...config import main_config as config
 from .LLMController import getPromptLocally
+from google.oauth2 import service_account
 
 load_dotenv()
 
 
 class StuntingController:
-    # bucket_name = os.environ.get('BUCKET_NAME','data-balita')
-    # client = storage.Client.from_service_account_json(json_credentials_path=config['GCS_CREDENTIALS'])
-    # bucket = storage.Bucket(client,bucket_name)
+    bucket_name = os.environ.get('BUCKET_NAME','capstonecicd-bucket')
+    credentials_json = os.environ.get('CREDENTIALS')
+
+    credentials_dict = json.loads(credentials_json)
+    credentials = service_account.Credentials.from_service_account_info(credentials_dict)
+    client = storage.Client(credentials=credentials)
+    bucket = storage.Bucket(client,bucket_name)
 
     model_stunting = tf.keras.models.load_model(
         mconfig['MODEL_CLASSIFICATION_STUNTING'], compile=False
@@ -64,16 +70,16 @@ class StuntingController:
             HTTPStatus.OK,
         )
 
-    # def upload_data(fieldnames,data,csv_file,path):
-    #     file_csv = csv_file
-    #     file_path = os.path.join(path,file_csv)
-    #     with open(file_path, mode='w', newline='') as file:
-    #         writer = csv.DictWriter(file, fieldnames=fieldnames)
-    #         writer.writeheader()
-    #         writer.writerow(data)
-    #     blob = StuntingController.bucket.blob(path+'/'+file_csv+str(random.randint(10000,99999)) )
-    #     blob.upload_from_filename(file_path)
-    #     os.remove(file_path)
+    def upload_data(fieldnames,data,csv_file,path):
+        file_csv = csv_file
+        file_path = os.path.join(path,file_csv)
+        with open(file_path, mode='w', newline='') as file:
+            writer = csv.DictWriter(file, fieldnames=fieldnames)
+            writer.writeheader()
+            writer.writerow(data)
+        blob = StuntingController.bucket.blob(path+'/'+file_csv+str(random.randint(10000,99999)) )
+        blob.upload_from_filename(file_path)
+        os.remove(file_path)
 
     def predict_stunting():
         if request.method == 'POST':
@@ -147,17 +153,17 @@ class StuntingController:
                         np.argmax(prediction_stunting_result)
                     ],
                 }
-                # StuntingController.upload_data(fieldstunting,data_stunting,'inputan_stunting.csv',config['UPLOAD_FOLDER_STUNTING'])
+                StuntingController.upload_data(fieldstunting,data_stunting,'inputan_stunting.csv',config['UPLOAD_FOLDER_STUNTING'])
 
                 data_weight = {
                     'Umur (bulan)': umur,
                     'Jenis Kelamin': jenis_kelamin,
-                    'Berat Badan (cm)': berat_badan,
+                    'Berat Badan (kg)': berat_badan,
                     'Status': StuntingController.classes_weight[
                         np.argmax(prediction_weight_result)
                     ],
                 }
-                # StuntingController.upload_data(fieldweight,data_weight,'inputan_weight.csv',config['UPLOAD_FOLDER_WEIGHT'])
+                StuntingController.upload_data(fieldweight,data_weight,'inputan_weight.csv',config['UPLOAD_FOLDER_WEIGHT'])
 
                 if umur <= 24:
                     input_data_ideal_024_predict = pd.DataFrame(
@@ -180,7 +186,7 @@ class StuntingController:
                             np.argmax(prediction_ideal_result)
                         ],
                     }
-                    # StuntingController.upload_data(fieldideal,data_ideal,'inputan_ideal_024.csv',config['UPLOAD_FOLDER_IDEAL_024'])
+                    StuntingController.upload_data(fieldideal,data_ideal,'inputan_ideal_024.csv',config['UPLOAD_FOLDER_IDEAL_024'])
                 else:
                     input_data_ideal_2460_predict = pd.DataFrame(
                         {
@@ -202,7 +208,7 @@ class StuntingController:
                             np.argmax(prediction_ideal_result)
                         ],
                     }
-                    # StuntingController.upload_data(fieldideal,data_ideal,'inputan_ideal_2460.csv',config['UPLOAD_FOLDER_IDEAL_2460'])
+                    StuntingController.upload_data(fieldideal,data_ideal,'inputan_ideal_2460.csv',config['UPLOAD_FOLDER_IDEAL_2460'])
 
                 result_prediction_stunting = {
                     'class': StuntingController.classes_stunting[
