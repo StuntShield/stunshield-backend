@@ -23,6 +23,8 @@ steps:
       - "--set-secrets=BUCKET_NAME=bucket-name:latest"
       - "--set-secrets=CREDENTIALS=gcs-key:latest"
       - "--set-secrets=OPENAI_KEY=openai-key:latest"
+      - "--update-env-vars=PORT=8080"
+      - "--port=8080"
 images:
   - "us-central1-docker.pkg.dev/$PROJECT_ID/capstonecicd-artifact/model-image:$COMMIT_SHA"
 logsBucket: "gs://capstonecicd-bucket/logs"
