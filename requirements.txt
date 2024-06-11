@@ -144,10 +144,8 @@ stack-data==0.6.3
 tensorboard==2.16.2
 tensorboard-data-server==0.7.2
 tensorflow==2.16.1
-tensorflow-datasets==4.9.4
 tensorflow-estimator==2.13.0
 tensorflow-io-gcs-filesystem==0.31.0
-tensorflow-metadata==1.15.0
 termcolor==2.4.0
 terminado==0.18.1
 threadpoolctl==3.5.0
