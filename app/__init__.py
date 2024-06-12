@@ -16,10 +16,12 @@ app = create_app()  # Creating the app
 app.register_blueprint(blueprint, url_prefix='/')
 
 # handling errors
-app.register_error_handler(404, ErrorHandlers.page_not_found)
-app.register_error_handler(500, ErrorHandlers.internal_server_error)
+http_codes = [404, 500, 405]
+
+for c in http_codes:
+    app.register_error_handler(c, ErrorHandlers.common)
+
 
 if __name__ == '__main__':  # Running the app
-    app.run(
-        host=config['BASE_URL'], port=config['PORT'], debug=config['DEBUG']
-    )
+    port = int(os.environ.get('PORT', 8080))
+    app.run(host='0.0.0.0', port=port)

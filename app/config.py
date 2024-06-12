@@ -6,6 +6,9 @@ main_config = {
     'UPLOAD_FOLDER_WEIGHT': 'app/assets/users_uploads/data_weight',
     'UPLOAD_FOLDER_IDEAL_024': 'app/assets/users_uploads/data_ideal/umur_0_24_bulan',
     'UPLOAD_FOLDER_IDEAL_2460': 'app/assets/users_uploads/data_ideal/umur_24_60_bulan',
+    'SEARCH_ENGINE_URL': 'https://www.googleapis.com/customsearch/v1',
+    'SEARCH_ENGINE_ID': 'c37f4842282914b17',
+    # 'SEARCH_ENGINE_KEY': '',
     # 'OPENAI_KEY': ,
     # 'GCS_CREDENTIALS': '',
     # 'GCP_CREDIT': ''
