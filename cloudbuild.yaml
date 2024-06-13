@@ -3,20 +3,20 @@ steps:
     args:
       - "build"
       - "-t"
-      - "us-central1-docker.pkg.dev/$PROJECT_ID/capstonecicd-artifact/model-image:$COMMIT_SHA"
+      - "asia-southeast2-docker.pkg.dev/$PROJECT_ID/stuntshield-artifact/stuntshield-image:$COMMIT_SHA"
       - "."
   - name: gcr.io/cloud-builders/docker
     args:
       - "push"
-      - "us-central1-docker.pkg.dev/$PROJECT_ID/capstonecicd-artifact/model-image:$COMMIT_SHA"
+      - "asia-southeast2-docker.pkg.dev/$PROJECT_ID/stuntshield-artifact/stuntshield-image:$COMMIT_SHA"
   - name: "gcr.io/cloud-builders/gcloud"
     entrypoint: gcloud
     args:
       - "run"
       - "deploy"
       - "stuntshield-v1"
-      - "--image=us-central1-docker.pkg.dev/$PROJECT_ID/capstonecicd-artifact/model-image:$COMMIT_SHA"
-      - "--region=us-central1"
+      - "--image=asia-southeast2-docker.pkg.dev/$PROJECT_ID/stuntshield-artifact/stuntshield-image:$COMMIT_SHA"
+      - "--region=asia-southeast2"
       - "--cpu=1"
       - "--memory=2048Mi"
       - "--allow-unauthenticated"
@@ -26,5 +26,5 @@ steps:
       - "--set-secrets=SEARCH_ENGINE_KEY=searchengine-key:latest"
       - "--port=8080"
 images:
-  - "us-central1-docker.pkg.dev/$PROJECT_ID/capstonecicd-artifact/model-image:$COMMIT_SHA"
+  - "asia-southeast2-docker.pkg.dev/$PROJECT_ID/stuntshield-artifact/stuntshield-image:$COMMIT_SHA"
 logsBucket: "gs://capstonecicd-bucket/logs"
