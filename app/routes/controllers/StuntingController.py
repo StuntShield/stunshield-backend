@@ -20,7 +20,7 @@ load_dotenv()
 
 
 class StuntingController:
-    bucket_name = os.environ.get('BUCKET_NAME','capstonecicd-bucket')
+    bucket_name = os.environ.get('BUCKET_NAME','stuntshield-data-prediction')
     credentials_json = os.environ.get('CREDENTIALS')
 
     credentials_dict = json.loads(credentials_json)
