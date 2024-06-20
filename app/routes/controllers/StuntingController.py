@@ -242,13 +242,14 @@ class StuntingController:
                     StuntingController.classes_weight[np.argmax(prediction_weight_result)],
                     StuntingController.classes_ideal[np.argmax(prediction_ideal_result)]
                 )
+                umur_str = "{} Tahun {} bulan".format(year,month)
                 result_all = {
                     'stunting': result_prediction_stunting,
                     'weight': result_prediction_weight,
                     'ideal': result_prediction_ideal,
                     'recommendation': getPromptLocally(
                         tinggi_badan,
-                        umur,
+                        umur_str,
                         result_str,
                         berat_badan,
                         jenis_kelamin,
